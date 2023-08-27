@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/img">
+    <qresource prefix="/">
         <file>img/checkmark.png</file>
     </qresource>
 </RCC>

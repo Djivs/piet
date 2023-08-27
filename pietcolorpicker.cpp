@@ -17,6 +17,8 @@ PietColorPicker::PietColorPicker(QWidget *parent)
     checkMarkIcon = QIcon(":/img/checkmark.png");
 
     setupUi();
+
+    setChecked(getColorButton(Qt::red));
 }
 
 QColor PietColorPicker::getPickedColor() const {
@@ -39,19 +41,35 @@ void PietColorPicker::setupUi() {
 void PietColorPicker::initButtons() {
     for (auto &color : colors) {
         QPushButton *button = new QPushButton;
+        button->setCheckable(true);
+        button->setChecked(false);
 
         QPalette palette;
         palette.setColor(QPalette::Button, color);
         button->setPalette(palette);
 
         connect(button, &QPushButton::clicked, this, [this, button] {
+            setChecked(button);
             pickedColor = button->palette().color(QPalette::Button);
-
             emit colorPicked(pickedColor);
         });
 
         buttons.push_back(button);
     }
+}
+
+void PietColorPicker::setChecked(QPushButton *button) {
+    for (auto &i : buttons) {
+        if (i->isChecked()) {
+            i->setIcon(QIcon());
+            i->setChecked(false);
+        }
+    }
+
+    qDebug() << button->size();
+
+    button->setIcon(checkMarkIcon);
+    button->setChecked(true);
 }
 void PietColorPicker::initButtonsLayout() {
     buttonsLayout = new QGridLayout;
@@ -61,4 +79,14 @@ void PietColorPicker::initButtonsLayout() {
         buttonsLayout->addWidget(buttons[i], i / rowButtonsAmount, i % rowButtonsAmount);
     }
 
+}
+
+QPushButton* PietColorPicker::getColorButton(const QColor &color) {
+    for (auto &button : buttons) {
+        if (button->palette().color(QPalette::Button) == color) {
+            return button;
+        }
+    }
+
+    return nullptr;
 }

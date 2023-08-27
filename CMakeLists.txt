@@ -14,10 +14,11 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        pietwidget.h pietwidget.cpp
+        pieteditor.h pieteditor.cpp
         pietcolorpicker.h pietcolorpicker.cpp
         pietgraphicsscene.h pietgraphicsscene.cpp
         pietscenesizeinput.h pietscenesizeinput.cpp
+        pietcompiler.h pietcompiler.cpp
 
         res.qrc
 )

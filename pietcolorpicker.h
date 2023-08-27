@@ -21,6 +21,10 @@ private:
 
     void initButtons();
     void initButtonsLayout();
+
+    void setChecked(QPushButton *button);
+
+    QPushButton *getColorButton(const QColor &color);
 private:
     int rowButtonsAmount;
 

@@ -1,11 +1,11 @@
-#include "pietwidget.h"
+#include "pieteditor.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    PietWidget w;
-    w.show();
+    PietEditor editor;
+    editor.show();
     return a.exec();
 }

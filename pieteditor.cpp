@@ -1,4 +1,4 @@
-#include "pietwidget.h"
+#include "pieteditor.h"
 
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -13,15 +13,15 @@
 
 #include "pietscenesizeinput.h"
 
-PietWidget::PietWidget(QWidget *parent)
-    : QWidget(parent) {
+PietEditor::PietEditor(QMainWindow *parent)
+    : QMainWindow(parent) {
     setupUi();
 }
 
-PietWidget::~PietWidget() {
+PietEditor::~PietEditor() {
 }
 
-void PietWidget::setupUi() {
+void PietEditor::setupUi() {
     scene = new PietGraphicsScene;
     view = new QGraphicsView;
     view->setScene(scene);
@@ -32,6 +32,7 @@ void PietWidget::setupUi() {
     QRadioButton *paintButton = new QRadioButton(tr("Paint"));
     paintButton->setChecked(true);
     QRadioButton *fillButton = new QRadioButton(tr("Fill"));
+    QRadioButton *selectButton = new QRadioButton(tr("Select"));
 
     connect(paintButton, &QRadioButton::clicked, this, [this] {
         scene->setEditMode(EditMode::PAINT);
@@ -39,10 +40,14 @@ void PietWidget::setupUi() {
     connect(fillButton, &QRadioButton::clicked, this, [this] {
         scene->setEditMode(EditMode::FILL);
     });
+    connect(selectButton, &QRadioButton::clicked, this, [this] {
+        scene->setEditMode(EditMode::SELECT);
+    });
 
     QVBoxLayout *editModeLayout = new QVBoxLayout;
     editModeLayout->addWidget(paintButton);
     editModeLayout->addWidget(fillButton);
+    editModeLayout->addWidget(selectButton);
 
     QGroupBox *editModeBox = new QGroupBox;
     editModeBox->setLayout(editModeLayout);
@@ -129,5 +134,8 @@ void PietWidget::setupUi() {
     mainLayout->addLayout(layout1);
     mainLayout->addWidget(view);
 
-    setLayout(mainLayout);
+    QWidget *centralWidget = new QWidget;
+    centralWidget->setLayout(mainLayout);
+
+    setCentralWidget(centralWidget);
 }

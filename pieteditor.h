@@ -1,19 +1,18 @@
-#ifndef PIETWIDGET_H
-#define PIETWIDGET_H
+#ifndef PIETEDITOR_H
+#define PIETEDITOR_H
 
-#include <QWidget>
+#include <QMainWindow>
 #include <QGraphicsView>
 
 #include "pietgraphicsscene.h"
 #include "pietcolorpicker.h"
 
-class PietWidget : public QWidget
-{
+class PietEditor : public QMainWindow {
     Q_OBJECT
 
 public:
-    PietWidget(QWidget *parent = nullptr);
-    ~PietWidget();
+    PietEditor(QMainWindow *parent = nullptr);
+    ~PietEditor();
 private:
     void setupUi();
 private:
@@ -23,4 +22,4 @@ private:
 
 
 };
-#endif // PIETWIDGET_H
+#endif // PIETEDITOR_H

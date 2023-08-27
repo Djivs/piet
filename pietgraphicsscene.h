@@ -5,7 +5,7 @@
 #include <QVector>
 #include <QImage>
 
-enum class EditMode {PAINT, FILL};
+enum class EditMode {PAINT, FILL, SELECT};
 
 class PietGraphicsScene : public QGraphicsScene
 {
@@ -19,6 +19,10 @@ public:
     void addColumn();
     void removeRow();
     void removeColumn();
+    void removeColumns(int amount);
+    void removeRows(int amount);
+
+    void loadFromImage(QImage img);
 
     void setSize(int newRowsAmount, int newColsAmount);
     void setRowsAmount(int newRowsAmount);
@@ -34,17 +38,24 @@ public slots:
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 private:
-    void drawSquares();
-    void drawSquaresRow(int row);
-    void drawSquaresCol(int col);
-    void drawSquare(int row, int col);
+    void selectSquare(int row, int col);
 
-    void resetColors();
+    void addGridItems();
+    void addGridRow(int row);
+    void addGridCol(int col);
+
+    void resetGrid();
     void resetChecks();
 
     void fillSquare(int row, int col, const QColor &color);
 
-    static QVector <QColor> getColorVector(const QColor &color, int len);
+    QGraphicsRectItem *getRect(int row, int col);
+    QVector <QGraphicsRectItem*> getRectRow(int row);
+    QColor getRectColor(int row, int col) const;
+    bool isRectSelected(int row, int col);
+
+    bool isRowValid(int row) const;
+    bool isColValid(int col) const;
 private:
     EditMode editMode;
 
@@ -54,8 +65,11 @@ private:
     int squareSize;
 
     QColor pickedColor;
+    QColor baseColor;
+    QColor selectColor;
+    QColor lineColor;
 
-    QVector <QVector <QColor>> colors;
+    QVector <QVector <QGraphicsRectItem *>> grid;
 
     QVector <QVector <bool>> checks;
 
