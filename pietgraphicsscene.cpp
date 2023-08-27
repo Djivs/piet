@@ -19,9 +19,6 @@ PietGraphicsScene::PietGraphicsScene(QObject *parent)
 
     resetGrid();
     addGridItems();
-
-
-    //loadFromImage(QImage("/home/dmitriy/Desktop/test.png"));
 }
 
 void PietGraphicsScene::selectSquare(int row, int col) {
@@ -96,7 +93,7 @@ void PietGraphicsScene::resetChecks() {
     }
 }
 
-QImage PietGraphicsScene::getImage() const {
+QImage PietGraphicsScene::getImage(int codelSize) const {
     QImage image(colsAmount, rowsAmount, QImage::Format_RGB16);
 
     for (int row = 0; row < rowsAmount; ++row) {
@@ -122,6 +119,9 @@ void PietGraphicsScene::loadFromImage(QImage img) {
 }
 
 void PietGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->button() != Qt::MouseButton::LeftButton) {
+        return;
+    }
     QPointF scenePos = event->scenePos();
 
     const int row = static_cast<int>(scenePos.y()) / squareSize;
@@ -149,15 +149,39 @@ void PietGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     }
 }
 
-void PietGraphicsScene::fillSquare(int row, int col, const QColor &color) {
-    if (!isRowValid(row) || !isColValid(col)) {
-            return;
-    }
-    if (getRectColor(row, col) != color) {
-            return;
-    }
-    if (checks[row][col]) {
+void PietGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->buttons() != Qt::LeftButton) {
         return;
+    }
+
+    QPointF scenePos = event->scenePos();
+
+    const int row = static_cast<int>(scenePos.y()) / squareSize;
+    const int col = static_cast<int>(scenePos.x()) / squareSize;
+
+    if (!isRowValid(row) || !isColValid(col)) {
+        return;
+    }
+
+    switch (editMode) {
+        case EditMode::PAINT:
+            grid[row][col]->setBrush(QBrush(pickedColor));
+            break;
+        case EditMode::FILL:
+            break;
+        case EditMode::SELECT:
+            selectSquare(row, col);
+            break;
+
+    }
+
+}
+
+void PietGraphicsScene::fillSquare(int row, int col, const QColor &color) {
+    if (!isRowValid(row) || !isColValid(col)
+    ||  getRectColor(row, col) != color
+    ||  checks[row][col]) {
+            return;
     }
 
     checks[row][col] = true;

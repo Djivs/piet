@@ -8,7 +8,7 @@ class PietCompiler : public QObject
     Q_OBJECT
 public:
     explicit PietCompiler(QObject *parent = nullptr);
-
+private:
 signals:
 
 };

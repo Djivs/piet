@@ -74,7 +74,8 @@ void PietEditor::setupUi() {
     layout1->addLayout(layout1_0);
 
     QPushButton *exportButton = new QPushButton(tr("Export"));
-    QPushButton *setCanvasSizeButton = new QPushButton(tr("Set canvas size"));
+    QPushButton *importButton = new QPushButton(tr("Import"));
+    QPushButton *setCanvasSizeButton = new QPushButton(tr("Set size"));
     QPushButton *addRowButton = new QPushButton(tr("Add row"));
     QPushButton *addColumnButton = new QPushButton(tr("Add column"));
     QPushButton *removeRowButton = new QPushButton(tr("Remove row"));
@@ -120,9 +121,20 @@ void PietEditor::setupUi() {
     connect(removeColumnButton, &QPushButton::clicked, this, [this] {
         scene->removeColumn();
     });
+    connect(importButton, &QPushButton::clicked, this, [this] {
+        const QString fileName = QFileDialog::getOpenFileName();
+        QImage image;
+        if (!image.load(fileName)) {
+            qDebug() << "Can't load image from file: " << fileName;
+            return;
+        }
+
+        scene->loadFromImage(image);
+    });
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addWidget(exportButton);
+    buttonsLayout->addWidget(importButton);
     buttonsLayout->addWidget(setCanvasSizeButton);
     buttonsLayout->addWidget(addRowButton);
     buttonsLayout->addWidget(addColumnButton);

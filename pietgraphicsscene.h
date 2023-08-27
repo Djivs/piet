@@ -13,7 +13,7 @@ class PietGraphicsScene : public QGraphicsScene
 public:
     explicit PietGraphicsScene(QObject *parent = nullptr);
 
-    QImage getImage() const;
+    QImage getImage(int codelSize = 1) const;
 
     void addRow();
     void addColumn();
@@ -37,6 +37,7 @@ public slots:
     void pickColor(QColor color);
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 private:
     void selectSquare(int row, int col);
 
